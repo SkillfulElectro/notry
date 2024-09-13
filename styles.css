@@ -1,7 +1,8 @@
 body {
     display: flex;
     min-height: 100vh;
-    background-color: #000436;
+    background-color: #121212;
+    color: #e0e0e0;
     font-family: Arial, sans-serif;
     margin: 0;
 }
@@ -28,28 +29,27 @@ body {
     font-size: 18px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #333;
+    color: #e0e0e0;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .note-button:hover, .custom-play-button:hover {
-    background-color: #45a049;
+    background-color: #555;
 }
 
 .title {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
-    color: #f2f3fc;
 }
 
 .custom-sound-box {
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #1e1e1e;
     width: 320px;
     text-align: center;
 }
