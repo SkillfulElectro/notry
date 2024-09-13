@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Musical Sound Customizer</title>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            padding: 20px;
+        }
+        .note-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+        }
+        .note-button, .custom-play-button {
+            margin: 10px;
+            padding: 20px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .note-button:hover, .custom-play-button:hover {
+            background-color: #45a049;
+        }
+        .title {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .custom-sound-box {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            width: 320px;
+            text-align: center;
+        }
+        .slider-container {
+            margin: 10px 0;
+        }
+        .slider, .dropdown, .number-input {
+            width: 100%;
+        }
+        .label {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .row .label {
+            margin: 0;
+            width: 50%;
+        }
+        .row .slider-container {
+            width: 45%;
+        }
+        .row .number-input {
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="note-buttons">
+            <div class="title">Advanced Musical Sound Customizer</div>
+            <!-- Buttons for each musical note -->
+            <button class="note-button" onclick="playNote(261.63)">C</button>
+            <button class="note-button" onclick="playNote(293.66)">D</button>
+            <button class="note-button" onclick="playNote(329.63)">E</button>
+            <button class="note-button" onclick="playNote(349.23)">F</button>
+            <button class="note-button" onclick="playNote(392.00)">G</button>
+            <button class="note-button" onclick="playNote(440.00)">A</button>
+            <button class="note-button" onclick="playNote(493.88)">B</button>
+        </div>
+
+        <!-- Custom Sound Box -->
+        <div class="custom-sound-box">
+            <div class="label">Select Note:</div>
+            <select class="dropdown" id="note-selector" onchange="updateCustomSettings(this.value)">
+                <option value="custom">Custom</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+            </select>
+            <div class="row">
+                <div class="label">Frequency (Hz):</div>
+                <div class="slider-container">
+                    <input type="range" min="20" max="20000" value="440" class="slider" id="frequency-slider" oninput="updateValue('frequency', this.value)">
+                    <input type="number" id="frequency-input" class="number-input" value="440" min="20" max="20000" oninput="updateSlider('frequency', this.value)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">Amplitude:</div>
+                <div class="slider-container">
+                    <input type="range" min="0" max="1" step="0.01" value="0.1" class="slider" id="amplitude-slider" oninput="updateValue('amplitude', this.value)">
+                    <input type="number" id="amplitude-input" class="number-input" value="0.1" min="0" max="1" step="0.01" oninput="updateSlider('amplitude', this.value)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">Waveform:</div>
+                <select class="dropdown" id="waveform-dropdown" onchange="updateValue('waveform', this.value)">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="label">Phase (Radians):</div>
+                <div class="slider-container">
+                    <input type="range" min="0" max="6.28" step="0.01" value="0" class="slider" id="phase-slider" oninput="updateValue('phase', this.value)">
+                    <input type="number" id="phase-input" class="number-input" value="0" min="0" max="6.28" step="0.01" oninput="updateSlider('phase', this.value)">
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">Duration (s):</div>
+                <div class="slider-container">
+                    <input type="range" min="0.01" max="10" step="0.01" value="1" class="slider" id="duration-slider" oninput="updateValue('duration', this.value)">
+                    <input type="number" id="duration-input" class="number-input" value="1" min="0.01" max="10" step="0.01" oninput="updateSlider('duration', this.value)">
+                </div>
+            </div>
+            <div class="label">Harmonics (comma-separated):</div>
+            <input type="text" id="harmonics-input" placeholder="e.g., 1,2,3" value="1">
+            <div class="label">Envelope (comma-separated):</div>
+            <input type="text" id="envelope-input" placeholder="e.g., 0.1,0.1,0.5,0.1" value="0.1,0.1,0.5,0.1">
+            <button class="custom-play-button" onclick="playCustomSound()">Play Custom Sound</button>
+        </div>
+    </div>
+
+    <script>
+        const noteSettings = {
+            'C': { frequency: 261.63, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'D': { frequency: 293.66, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'E': { frequency: 329.63, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'F': { frequency: 349.23, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'G': { frequency: 392.00, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'A': { frequency: 440.00, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'B': { frequency: 493.88, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] },
+            'custom': { frequency: 440, waveform: 'sine', amplitude: 0.1, phase: 0, duration: 1, harmonics: [1], envelope: [0.1, 0.1, 0.5, 0.1] }
+        };
+
+        function playNote(frequency) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 1); // Duration is 1 second
+        }
+
+        function playCustomSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            const frequency = parseFloat(document.getElementById('frequency-slider').value);
+            const waveform = document.getElementById('waveform-dropdown').value;
+            const amplitude = parseFloat(document.getElementById('amplitude-slider').value);
+            const phase = parseFloat(document.getElementById('phase-slider').value);
+            const duration = parseFloat(document.getElementById('duration-slider').value);
+            const harmonics = document.getElementById('harmonics-input').value.split(',').map(Number);
+            const envelope = document.getElementById('envelope-input').value.split(',').map(Number);
+
+            oscillator.type = waveform;
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(amplitude, audioContext.currentTime);
+
+            if (envelope.length === 4) {
+                const [attack, decay, sustain, release] = envelope;
+                const now = audioContext.currentTime;
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(amplitude, now + attack);
+                gainNode.gain.linearRampToValueAtTime(amplitude * sustain, now + attack + decay);
+                gainNode.gain.linearRampToValueAtTime(0, now + attack + decay + release);
+            }
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+
+            if (harmonics.length > 1) {
+                harmonics.forEach(harmonic => {
+                    if (harmonic > 1) {
+                        const harmonicOscillator = audioContext.createOscillator();
+                        harmonicOscillator.type = waveform;
+                        harmonicOscillator.frequency.setValueAtTime(frequency * harmonic, audioContext.currentTime);
+                        harmonicOscillator.connect(gainNode);
+                        harmonicOscillator.start();
+                        harmonicOscillator.stop(audioContext.currentTime + duration);
+                    }
+                });
+            }
+        }
+
+        function updateValue(type, value) {
+            if (type === 'waveform') {
+                document.getElementById('waveform-dropdown').value = value;
+            } else {
+                document.getElementById(`${type}-input`).value = value;
+            }
+        }
+
+        function updateSlider(type, value) {
+            if (type === 'waveform') {
+                document.getElementById('waveform-dropdown').value = value;
+            } else {
+                document.getElementById(`${type}-slider`).value = value;
+            }
+        }
+
+        function updateCustomSettings(note) {
+            if (note === 'custom') {
+                return; // Do nothing if 'Custom' is selected
+            }
+            const settings = noteSettings[note];
+            document.getElementById('frequency-slider').value = settings.frequency;
+            document.getElementById('frequency-input').value = settings.frequency;
+            document.getElementById('waveform-dropdown').value = settings.waveform;
+            document.getElementById('amplitude-slider').value = settings.amplitude;
+            document.getElementById('amplitude-input').value = settings.amplitude;
+            document.getElementById('phase-slider').value = settings.phase;
+            document.getElementById('phase-input').value = settings.phase;
+            document.getElementById('duration-slider').value = settings.duration;
+            document.getElementById('duration-input').value = settings.duration;
+            document.getElementById('harmonics-input').value = settings.harmonics.join(',');
+            document.getElementById('envelope-input').value = settings.envelope.join(',');
+        }
+    </script>
+</body>
+</html>
