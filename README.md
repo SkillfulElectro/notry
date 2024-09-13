@@ -1,2 +1,2 @@
 # notry
-simple website to create custom music notes
+- this project is just a simple test for Web Audio API
