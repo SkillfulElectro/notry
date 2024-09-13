@@ -2,7 +2,6 @@ body {
     display: flex;
     min-height: 100vh;
     background-color: #f0f0f0;
-    color: #e0e0e0;
     font-family: Arial, sans-serif;
     margin: 0;
 }
